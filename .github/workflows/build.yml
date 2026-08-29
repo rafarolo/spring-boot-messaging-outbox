@@ -1,0 +1,20 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: temurin
+          cache: maven
+      # Docker is present on ubuntu-latest, so the Testcontainers tests run here even
+      # though they skip on a machine without it.
+      - run: ./mvnw -B verify
