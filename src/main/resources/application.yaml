@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: spring-boot-messaging-outbox
+  sql:
+    init:
+      mode: always
+  kafka:
+    consumer:
+      group-id: outbox-demo
+      auto-offset-reset: earliest
+    producer:
+      # Without this a send can be acknowledged by a leader that has not replicated it, and
+      # a leader failure loses a message the outbox already marked as published.
+      acks: all
+
+outbox:
+  poll-interval: PT1S
+
+poison:
+  attempts: 4
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
